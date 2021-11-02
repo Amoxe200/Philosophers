@@ -6,19 +6,19 @@
 /*   By: aaqari <aaqari@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 12:06:03 by aaqari            #+#    #+#             */
-/*   Updated: 2021/11/01 12:54:48 by aaqari           ###   ########.fr       */
+/*   Updated: 2021/11/02 20:03:12 by aaqari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-
-int		ft_isdigit(int c)
+int	ft_isdigit(int c)
 {
 	if (c >= 48 && c <= 57)
 		return (1);
 	return (0);
 }
+
 int	ft_atoi(const char *ptr)
 {
 	long	res;
