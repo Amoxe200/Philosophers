@@ -6,7 +6,7 @@
 /*   By: aaqari <aaqari@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/30 15:11:37 by aaqari            #+#    #+#             */
-/*   Updated: 2021/11/01 19:40:43 by aaqari           ###   ########.fr       */
+/*   Updated: 2021/11/01 20:02:04 by aaqari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,19 +52,10 @@ void    parser(char **argv, t_info *info)
     info->time_to_eat = ft_atoi(argv[3]);
     info->time_to_sleep = ft_atoi(argv[4]);
     info->nb_p_m_eat = ft_atoi(argv[5]);
-    info->philo_id = malloc(sizeof(int) * info->nb_philos);
-    i = 0;
-    printf("Number of philos is %d\n", info->nb_philos);
-    while (i < info->nb_philos)
-    {
-        info->philo_id[i] = i;
-        i++;
-    }
 }
 
 int main(int argc, char **argv)
 {
-    
     t_info  info;
     
     if (argc != 5 && argc != 6)

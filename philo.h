@@ -6,7 +6,7 @@
 /*   By: aaqari <aaqari@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/30 15:11:47 by aaqari            #+#    #+#             */
-/*   Updated: 2021/11/01 19:01:34 by aaqari           ###   ########.fr       */
+/*   Updated: 2021/11/01 20:03:38 by aaqari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef struct s_info
     int nb_p_m_eat;
     int nb_philos;
     //--
-    int *philo_id;
+    int philo_id;
     int nb_meals;
     int left_fork;
     int right_fork;
