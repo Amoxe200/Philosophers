@@ -6,7 +6,7 @@
 /*   By: aaqari <aaqari@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/30 15:11:37 by aaqari            #+#    #+#             */
-/*   Updated: 2021/11/02 15:15:18 by aaqari           ###   ########.fr       */
+/*   Updated: 2021/11/02 18:05:49 by aaqari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ t_philo    *init_data(int argc, char **argv)
         philo[i].nb_meals = 0;
         philo[i].lt_eat = 0;
         philo[i].is_eating = 0;
-        pthread_mutex_init(&philo[i].eat, NULL);
         i++;
     }
     return (philo);
@@ -83,6 +82,27 @@ static int checker(char **argv)
     }
     return (0);
 }
+int supervisor(t_philo *philo)
+{
+    int i;
+    // int j;
+    struct timeval now;
+    
+    i = 0;
+    while (1)
+    {
+        while(i < philo[i].info->nb_philos)
+        {
+            gettimeofday(&now, NULL);
+            if ((to_ms(now) - philo[i].lt_eat) > philo[i].info->time_to_die)
+                {
+                    print("Is Dead", philo);
+                    return (0);
+                }
+            i++;
+        }
+    }
+}
 
 int main(int argc, char **argv)
 {
@@ -96,6 +116,8 @@ int main(int argc, char **argv)
         philos = init_data(argc, argv);
         thread = malloc(sizeof(pthread_t) * philos->info->nb_philos);
         thread_init(philos, thread);
+        
+        //free
     }
     return (0);
 } 
