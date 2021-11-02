@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaqari <aaqari@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amoxe <amoxe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/30 15:11:37 by aaqari            #+#    #+#             */
-/*   Updated: 2021/11/01 19:40:43 by aaqari           ###   ########.fr       */
+/*   Updated: 2021/11/01 23:22:16 by amoxe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,24 +42,28 @@ void    init(t_info *info)
     info->nb_p_m_eat = 0;
 }
 
-void    parser(char **argv, t_info *info)
+void    parser(int argc, char **argv, t_info *info)
 {
-    int i;
+    t_philo *philo;
+    t_info  *info
+    
     checker(argv);
     init(info);
+    
     info->nb_philos = ft_atoi(argv[1]);
     info->time_to_die = ft_atoi(argv[2]);
     info->time_to_eat = ft_atoi(argv[3]);
     info->time_to_sleep = ft_atoi(argv[4]);
-    info->nb_p_m_eat = ft_atoi(argv[5]);
-    info->philo_id = malloc(sizeof(int) * info->nb_philos);
+    if (argc == 6)
+        info->nb_p_m_eat = ft_atoi(argv[5]);
+    info->forks = malloc(sizeof(pthread_mutex_t) * info->nb_philos);
+    pthread_mutex_init(&info->mutex, NULL);
     i = 0;
-    printf("Number of philos is %d\n", info->nb_philos);
     while (i < info->nb_philos)
-    {
-        info->philo_id[i] = i;
-        i++;
-    }
+        {
+            pthread_mutex_init(&info->forks[i], NULL);
+            i++;
+        }
 }
 
 int main(int argc, char **argv)
@@ -72,7 +76,7 @@ int main(int argc, char **argv)
         perror("Error In argc");
         exit(1);
     }
-    parser(argv, &info);
+    parser(argc, argv, &info);
     thread_init(&info);
     return (0);
 } 
