@@ -6,7 +6,7 @@
 /*   By: aaqari <aaqari@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/30 15:11:47 by aaqari            #+#    #+#             */
-/*   Updated: 2021/11/01 20:03:38 by aaqari           ###   ########.fr       */
+/*   Updated: 2021/11/02 14:55:08 by aaqari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
-
-/*typedef struct s_philo
-{
-    int philo_id;
-    int nb_meals;
-    int left_fork;
-    int right_fork;
-}               t_philo;*/
+#include <sys/time.h>
 
 typedef struct s_info
 {
@@ -33,28 +26,27 @@ typedef struct s_info
     int time_to_sleep;
     int nb_p_m_eat;
     int nb_philos;
-    //--
-    int philo_id;
-    int nb_meals;
-    int left_fork;
-    int right_fork;
-
+    struct timeval base;
+    pthread_mutex_t     *forks;
+    pthread_mutex_t     printer;
 }t_info;
 
-t_info g_info;
 
-typedef struct s_table
+typedef struct s_philo
 {
+    int philo_id;
+    int nb_meals;
+    int lt_eat;
+    int     is_eating;
+    pthread_mutex_t     eat;
     t_info *info;
-    //t_philo *philos;
-       
-}t_table;
+}t_philo;
 
-
-void    parser(char **argv, t_info *info);
+t_philo    *init_data(int argc, char **argv);
 int		ft_atoi(const char *ptr);
 int		ft_isdigit(int c);
-int    thread_init(t_info *info);
+void    thread_init(t_philo *philo, pthread_t *thread);
 void    init(t_info *info);
+t_info  *init_info(int argc, char **argv);
 
 #endif
