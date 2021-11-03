@@ -6,18 +6,35 @@
 /*   By: aaqari <aaqari@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 15:02:27 by aaqari            #+#    #+#             */
-/*   Updated: 2021/11/02 19:56:13 by aaqari           ###   ########.fr       */
+/*   Updated: 2021/11/03 12:50:29 by aaqari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-unsigned long long	to_ms(struct timeval timer)
+void mysleep(unsigned int ms)
 {
-	unsigned long long	x;
+	unsigned int t;
+	struct timeval	now;
+	struct timeval	end;
 
-	x = (((unsigned long long)timer.tv_sec) * 1000)
-		+ (((unsigned long long)timer.tv_usec) / 1000);
+	gettimeofday(&now, NULL);
+	usleep((ms * 1000) * 0.9);
+	t = to_ms(now);
+	gettimeofday(&end, NULL);
+	while(to_ms(end) - t <= ms)
+	{
+		gettimeofday(&end, NULL);
+		continue;
+	}	
+}
+
+unsigned int	to_ms(struct timeval timer)
+{
+	unsigned int	x;
+
+	x = (((unsigned int)timer.tv_sec) * 1000)
+		+ (((unsigned int)timer.tv_usec) / 1000);
 	return (x);
 }
 
@@ -25,18 +42,18 @@ void	print(char *str, t_philo *philo)
 {
 	struct timeval	now;
 
-	pthread_mutex_lock(&philo->info->printer);
 	if (str[3] == 'e' || str[3] == 'D')
 		pthread_mutex_lock(&philo->eat);
+	pthread_mutex_lock(&philo->info->printer);
 	gettimeofday(&now, NULL);
 	printf("%d %d %s\n", (int)(to_ms(now)
 			- to_ms(philo->info->base)), philo->philo_id + 1, str);
 	if (str[3] != 'D')
 		pthread_mutex_unlock(&philo->info->printer);
 	if (str[3] == 'e')
-		usleep(philo->info->time_to_eat * 1000);
+		mysleep(philo->info->time_to_eat);
 	else if (str[3] == 's')
-		usleep(philo->info->time_to_sleep * 1000);
+		mysleep(philo->info->time_to_sleep);
 	if (str[3] == 'e')
 		pthread_mutex_unlock(&philo->eat);
 }
@@ -57,7 +74,7 @@ void	*routine(void *arg)
 		pthread_mutex_lock(&philo->info->forks[next]);
 		print("has taken a fork2", philo);
 		gettimeofday(&now, NULL);
-		philo->lt_eat = philo->lt_eat - to_ms(now);
+		philo->lt_eat = to_ms(now);
 		print("is eating", philo);
 		philo->nb_meals++;
 		pthread_mutex_unlock(&philo->info->forks[philo->philo_id]);

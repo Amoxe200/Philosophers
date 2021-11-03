@@ -6,7 +6,7 @@
 /*   By: aaqari <aaqari@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/30 15:11:47 by aaqari            #+#    #+#             */
-/*   Updated: 2021/11/02 20:01:46 by aaqari           ###   ########.fr       */
+/*   Updated: 2021/11/03 14:51:57 by aaqari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <pthread.h>
 # include <sys/time.h>
+# include <errno.h>
 
 typedef struct s_info
 {
@@ -36,12 +37,12 @@ typedef struct s_philo
 	int					philo_id;
 	int					nb_meals;
 	int					is_eating;
-	unsigned long long	lt_eat;
+	unsigned int		lt_eat;
 	pthread_mutex_t		eat;
 	t_info				*info;
 }				t_philo;
 
-unsigned long long	to_ms(struct timeval timer);
+unsigned int	to_ms(struct timeval timer);
 int					ft_atoi(const char *ptr);
 int					ft_isdigit(int c);
 void				thread_init(t_philo *philo, pthread_t *thread);

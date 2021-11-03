@@ -6,7 +6,7 @@
 /*   By: aaqari <aaqari@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/30 15:11:37 by aaqari            #+#    #+#             */
-/*   Updated: 2021/11/02 19:49:04 by aaqari           ###   ########.fr       */
+/*   Updated: 2021/11/03 15:01:55 by aaqari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_info	*init_info(int argc, char **argv)
 	info->time_to_die = ft_atoi(argv[2]);
 	info->time_to_eat = ft_atoi(argv[3]);
 	info->time_to_sleep = ft_atoi(argv[4]);
+	info->nb_p_m_eat = -1;
 	if (argc == 6)
 		info->nb_p_m_eat = ft_atoi(argv[5]);
 	info->forks = malloc(sizeof(pthread_mutex_t) * info->nb_philos);
@@ -47,6 +48,7 @@ t_philo	*init_data(int argc, char **argv)
 	i = 0;
 	while (i < info->nb_philos)
 	{
+		pthread_mutex_init(&philo[i].eat, NULL);
 		philo[i].philo_id = i;
 		philo[i].info = info;
 		philo[i].nb_meals = 0;
@@ -70,7 +72,7 @@ static	int	checker(char **argv)
 		{
 			if (!ft_isdigit(argv[i][j]))
 			{
-				perror("Error In Args Check Again\n");
+				printf("Error In Args Check Again\n");
 				return (1);
 			}
 			j++;
@@ -87,23 +89,35 @@ int	supervisor(t_philo *philo)
 	int				i;
 	int				nb;
 	struct timeval	now;
+	int chbeo;
 
 	i = 0;
 	nb = philo[i].info->nb_philos;
 	while (1)
 	{
 		i = 0;
+		chbeo = 0;
 		while (i < nb)
 		{
 			gettimeofday(&now, NULL);
 			if (((int)(to_ms(now) - philo[i].lt_eat))
 			> philo[i].info->time_to_die)
 			{
+				//printf("%u\n%d\n", to_ms(now), philo[i].lt_eat);
 				print("Is Dead", philo);
 				return (0);
 			}
+			if (philo[i].info->nb_p_m_eat != -1)
+			{
+				if (philo[i].nb_meals >= philo[i].info->nb_p_m_eat)
+				chbeo++;
+				if (chbeo == philo->info->nb_philos)
+				return (0);
+			}
+			
 			i++;
 		}
+		//usleep(1000);
 	}
 }
 
