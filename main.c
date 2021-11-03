@@ -6,7 +6,7 @@
 /*   By: aaqari <aaqari@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/30 15:11:37 by aaqari            #+#    #+#             */
-/*   Updated: 2021/11/03 15:01:55 by aaqari           ###   ########.fr       */
+/*   Updated: 2021/11/03 16:38:44 by aaqari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_info	*init_info(int argc, char **argv)
 		pthread_mutex_init(&info->forks[i], NULL);
 		i++;
 	}
-	gettimeofday(&info->base, NULL);
+	info->base = itsmytime();
 	return (info);
 }
 
@@ -52,7 +52,7 @@ t_philo	*init_data(int argc, char **argv)
 		philo[i].philo_id = i;
 		philo[i].info = info;
 		philo[i].nb_meals = 0;
-		philo[i].lt_eat = 0;
+		philo[i].lt_eat = itsmytime();
 		philo[i].is_eating = 0;
 		i++;
 	}
@@ -88,8 +88,7 @@ int	supervisor(t_philo *philo)
 {
 	int				i;
 	int				nb;
-	struct timeval	now;
-	int chbeo;
+	int				chbeo;
 
 	i = 0;
 	nb = philo[i].info->nb_philos;
@@ -99,25 +98,18 @@ int	supervisor(t_philo *philo)
 		chbeo = 0;
 		while (i < nb)
 		{
-			gettimeofday(&now, NULL);
-			if (((int)(to_ms(now) - philo[i].lt_eat))
-			> philo[i].info->time_to_die)
-			{
-				//printf("%u\n%d\n", to_ms(now), philo[i].lt_eat);
-				print("Is Dead", philo);
-				return (0);
-			}
+			if (itsmytime() - philo[i].lt_eat > philo[i].info->time_to_die)
+				return (print("Is Dead", philo));
 			if (philo[i].info->nb_p_m_eat != -1)
 			{
 				if (philo[i].nb_meals >= philo[i].info->nb_p_m_eat)
-				chbeo++;
+					chbeo++;
 				if (chbeo == philo->info->nb_philos)
-				return (0);
+					return (0);
 			}
-			
 			i++;
 		}
-		//usleep(1000);
+		usleep(1000);
 	}
 }
 

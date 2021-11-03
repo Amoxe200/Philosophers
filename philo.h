@@ -6,7 +6,7 @@
 /*   By: aaqari <aaqari@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/30 15:11:47 by aaqari            #+#    #+#             */
-/*   Updated: 2021/11/03 14:51:57 by aaqari           ###   ########.fr       */
+/*   Updated: 2021/11/03 16:39:29 by aaqari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@
 typedef struct s_info
 {
 	int						time_to_eat;
-	int						time_to_die;
+	unsigned int			time_to_die;
 	int						time_to_sleep;
 	int						nb_p_m_eat;
 	int						nb_philos;
-	struct timeval			base;
+	unsigned int			base;
 	pthread_mutex_t			*forks;
 	pthread_mutex_t			printer;
 
@@ -42,14 +42,15 @@ typedef struct s_philo
 	t_info				*info;
 }				t_philo;
 
-unsigned int	to_ms(struct timeval timer);
+unsigned int		to_ms(struct timeval timer);
 int					ft_atoi(const char *ptr);
 int					ft_isdigit(int c);
 void				thread_init(t_philo *philo, pthread_t *thread);
 void				init(t_info *info);
-void				print(char *str, t_philo *philo);
+int					print(char *str, t_philo *philo);
 int					supervisor(t_philo *philo);
 t_philo				*init_data(int argc, char **argv);
 t_info				*init_info(int argc, char **argv);
+unsigned int		itsmytime(void);
 
 #endif
